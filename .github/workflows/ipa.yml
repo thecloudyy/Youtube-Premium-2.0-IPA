@@ -279,6 +279,13 @@ jobs:
         if: ${{ inputs.volboost }}
         run: git clone --quiet --depth=1 https://github.com/VasirakCalgux/VolumeBoostYT.git
 
+      - name: Patch VolumeBoostYT for Logos internal generator
+        if: ${{ inputs.volboost }}
+        run: |
+          cd VolumeBoostYT
+          perl -pi -e 's/NSMutableArray \*mutableCategories = %orig\.mutableCopy;/NSArray *origCategories = %orig;\n  NSMutableArray *mutableCategories = [origCategories mutableCopy];/' Tweak.x
+          grep -n "mutableCategories =" Tweak.x
+
       - name: Clone YouQuality
         if: ${{ inputs.youquality }}
         run: git clone --quiet --depth=1 https://github.com/PoomSmart/YouQuality.git
