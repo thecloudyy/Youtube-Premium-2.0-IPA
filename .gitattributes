@@ -1,0 +1,4 @@
+# Theos/Logos tweak sources must keep LF line endings:
+# the Logos preprocessor on the macOS runner misparses CRLF one-liners
+# (see Files/Apperence.x build failure: "function definition is not allowed here").
+*.x text eol=lf

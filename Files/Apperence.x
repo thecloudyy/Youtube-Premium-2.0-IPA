@@ -10,17 +10,41 @@
 %end
 
 %hook YTCommonColorPalette
-- (UIColor *)baseBackground { return self.pageStyle == 1 ? [UIColor blackColor] : %orig; }
-- (UIColor *)brandBackgroundSolid { return self.pageStyle == 1 ? [UIColor blackColor] : %orig; }
-- (UIColor *)brandBackgroundPrimary { return self.pageStyle == 1 ? [UIColor blackColor] : %orig; }
-- (UIColor *)brandBackgroundSecondary { return self.pageStyle == 1 ? [UIColor blackColor] : %orig; }
-- (UIColor *)raisedBackground { return self.pageStyle == 1 ? [UIColor blackColor] : %orig; }
-- (UIColor *)staticBrandBlack { return self.pageStyle == 1 ? [UIColor blackColor] : %orig; }
-- (UIColor *)generalBackgroundA { return self.pageStyle == 1 ? [UIColor blackColor] : %orig; }
+- (UIColor *)baseBackground {
+    if (self.pageStyle == 1) return [UIColor blackColor];
+    return %orig;
+}
+- (UIColor *)brandBackgroundSolid {
+    if (self.pageStyle == 1) return [UIColor blackColor];
+    return %orig;
+}
+- (UIColor *)brandBackgroundPrimary {
+    if (self.pageStyle == 1) return [UIColor blackColor];
+    return %orig;
+}
+- (UIColor *)brandBackgroundSecondary {
+    if (self.pageStyle == 1) return [UIColor blackColor];
+    return %orig;
+}
+- (UIColor *)raisedBackground {
+    if (self.pageStyle == 1) return [UIColor blackColor];
+    return %orig;
+}
+- (UIColor *)staticBrandBlack {
+    if (self.pageStyle == 1) return [UIColor blackColor];
+    return %orig;
+}
+- (UIColor *)generalBackgroundA {
+    if (self.pageStyle == 1) return [UIColor blackColor];
+    return %orig;
+}
 %end
 
 %hook YTInnerTubeCollectionViewController
-- (UIColor *)backgroundColor:(NSInteger)pageStyle { return pageStyle == 1 ? [UIColor blackColor] : %orig; }
+- (UIColor *)backgroundColor:(NSInteger)pageStyle {
+    if (pageStyle == 1) return [UIColor blackColor];
+    return %orig;
+}
 %end
 
 %hook _ASDisplayView
