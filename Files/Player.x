@@ -287,11 +287,18 @@ static void YouModAddEndTime(YTPlayerViewController *self, YTSingleVideoControll
 
 %hook YTMainAppControlsOverlayView
 // Hide autoplay Switch
-- (void)setAutoplaySwitchButtonRenderer:(id)arg1 { if (!IS_ENABLED(HideAutoPlayToggle)) %orig; }
+- (void)setAutoplaySwitchButtonRenderer:(id)arg1 {
+    if (!IS_ENABLED(HideAutoPlayToggle)) %orig;
+}
 // Hide captions Button
-- (void)setClosedCaptionsOrSubtitlesButtonAvailable:(BOOL)arg1 { if (!IS_ENABLED(HideCaptionsButton)) %orig; }
+- (void)setClosedCaptionsOrSubtitlesButtonAvailable:(BOOL)arg1 {
+    if (!IS_ENABLED(HideCaptionsButton)) %orig;
+}
 // Hide video title in full screen
-- (BOOL)titleViewHidden { return IS_ENABLED(HideFullvidTitle) ? YES : %orig; }
+- (BOOL)titleViewHidden {
+    if (IS_ENABLED(HideFullvidTitle)) return YES;
+    return %orig;
+}
 // Pause On Overlay
 - (void)setOverlayVisible:(BOOL)visible {
     %orig;
@@ -303,7 +310,9 @@ static void YouModAddEndTime(YTPlayerViewController *self, YTSingleVideoControll
 %end
 
 %hook YTAutonavEndscreenController
-- (void)showEndscreen { if (!IS_ENABLED(HideSuggestedVideo)) %orig; }
+- (void)showEndscreen {
+    if (!IS_ENABLED(HideSuggestedVideo)) %orig;
+}
 - (void)showEndscreenControlsInPlayerBar:(BOOL)arg {
     BOOL temp = IS_ENABLED(HideSuggestedVideo) ? NO : arg;
     %orig(temp);
@@ -311,20 +320,41 @@ static void YouModAddEndTime(YTPlayerViewController *self, YTSingleVideoControll
 %end
 
 %hook YTSettings
-- (BOOL)isAutoplayEnabled { return IS_ENABLED(HideAutoPlayToggle) ? NO : %orig; }
+- (BOOL)isAutoplayEnabled {
+    if (IS_ENABLED(HideAutoPlayToggle)) return NO;
+    return %orig;
+}
 %end
 
 %hook YTSettingsImpl
-- (BOOL)isAutoplayEnabled { return IS_ENABLED(HideAutoPlayToggle) ? NO : %orig; }
+- (BOOL)isAutoplayEnabled {
+    if (IS_ENABLED(HideAutoPlayToggle)) return NO;
+    return %orig;
+}
 %end
 
 %hook YTColdConfig
-- (BOOL)isLandscapeEngagementPanelEnabled { return IS_ENABLED(DisablesEngagementPanel) ? NO : %orig; }
-- (BOOL)removeNextPaddleForAllVideos { return IS_ENABLED(HideNextAndPrevButtons) ? YES : %orig; }
-- (BOOL)removePreviousPaddleForAllVideos { return IS_ENABLED(HideNextAndPrevButtons) ? YES : %orig; }
+- (BOOL)isLandscapeEngagementPanelEnabled {
+    if (IS_ENABLED(DisablesEngagementPanel)) return NO;
+    return %orig;
+}
+- (BOOL)removeNextPaddleForAllVideos {
+    if (IS_ENABLED(HideNextAndPrevButtons)) return YES;
+    return %orig;
+}
+- (BOOL)removePreviousPaddleForAllVideos {
+    if (IS_ENABLED(HideNextAndPrevButtons)) return YES;
+    return %orig;
+}
 // Replace previous/next buttons with back and forward
-- (BOOL)replaceNextPaddleWithFastForwardButtonForSingletonVods { return IS_ENABLED(ReplacePrevNextButtons) ? YES : %orig; }
-- (BOOL)replacePreviousPaddleWithRewindButtonForSingletonVods { return IS_ENABLED(ReplacePrevNextButtons) ? YES : %orig; }
+- (BOOL)replaceNextPaddleWithFastForwardButtonForSingletonVods {
+    if (IS_ENABLED(ReplacePrevNextButtons)) return YES;
+    return %orig;
+}
+- (BOOL)replacePreviousPaddleWithRewindButtonForSingletonVods {
+    if (IS_ENABLED(ReplacePrevNextButtons)) return YES;
+    return %orig;
+}
 %end
 
 // No Endscreen Cards
@@ -337,12 +367,17 @@ static void YouModAddEndTime(YTPlayerViewController *self, YTSingleVideoControll
     BOOL temp = IS_ENABLED(HideEndScreenCards) ? YES : arg;
     %orig(temp);
 }
-- (void)setHoverCardRenderer:(id)arg { if (!IS_ENABLED(HideEndScreenCards)) %orig; }
+- (void)setHoverCardRenderer:(id)arg {
+    if (!IS_ENABLED(HideEndScreenCards)) %orig;
+}
 %end
 
 %hook YTMainAppVideoPlayerOverlayViewController
 // Disable Double Tap To Seek
-- (BOOL)allowDoubleTapToSeekGestureRecognizer { return IS_ENABLED(DisablesDoubleTap) ? NO : %orig; }
+- (BOOL)allowDoubleTapToSeekGestureRecognizer {
+    if (IS_ENABLED(DisablesDoubleTap)) return NO;
+    return %orig;
+}
 // Disable long hold
 - (BOOL)allowLongPressGestureRecognizerInView:(id)arg { 
     if (IS_ENABLED(DisablesLongHold) || INTFORVAL(HoldToSpeedIndex) != 0) return NO;
@@ -367,12 +402,16 @@ static void YouModAddEndTime(YTPlayerViewController *self, YTSingleVideoControll
     }
     return %orig; 
 }
-- (void)setPaidContentWithPlayerData:(id)data { if (!IS_ENABLED(HidePaidPromoOverlay)) %orig; }
+- (void)setPaidContentWithPlayerData:(id)data {
+    if (!IS_ENABLED(HidePaidPromoOverlay)) %orig;
+}
 %end
 
 // YTNoPaidPromo (https://github.com/PoomSmart/YTNoPaidPromo)
 %hook YTInlineMutedPlaybackPlayerOverlayViewController
-- (void)setPaidContentWithPlayerData:(id)data { if (!IS_ENABLED(HidePaidPromoOverlay)) %orig; }
+- (void)setPaidContentWithPlayerData:(id)data {
+    if (!IS_ENABLED(HidePaidPromoOverlay)) %orig;
+}
 %end
 
 // Remove Watermarks
@@ -407,7 +446,10 @@ static void YouModAddEndTime(YTPlayerViewController *self, YTSingleVideoControll
 
 // Exit Fullscreen on Finish
 %hook YTWatchFlowController
-- (BOOL)shouldExitFullScreenOnFinish { return IS_ENABLED(AutoExitFullScreen) ? YES : %orig; }
+- (BOOL)shouldExitFullScreenOnFinish {
+    if (IS_ENABLED(AutoExitFullScreen)) return YES;
+    return %orig;
+}
 %end
 
 // Always use remaining time in the video player - @bhackel
@@ -449,7 +491,9 @@ static void YouModAddEndTime(YTPlayerViewController *self, YTSingleVideoControll
 
 // Disable Ambiant mode (Hide the lights)
 %hook YTWatchView
-- (void)setCinematicContainerView:(id)arg { if (!IS_ENABLED(RemoveAmbiant)) %orig; }
+- (void)setCinematicContainerView:(id)arg {
+    if (!IS_ENABLED(RemoveAmbiant)) %orig;
+}
 %end
 
 // Disable Autoplay 
@@ -462,16 +506,25 @@ static void YouModAddEndTime(YTPlayerViewController *self, YTSingleVideoControll
 
 // Skip Content Warning (https://github.com/qnblackcat/uYouPlus/blob/main/uYouPlus.xm#L452-L454)
 %hook YTPlayabilityResolutionUserActionUIController
-- (void)showConfirmAlert { IS_ENABLED(HideContentWarning) ? [self confirmAlertDidPressConfirm] : %orig; }
+- (void)showConfirmAlert {
+    if (IS_ENABLED(HideContentWarning)) [self confirmAlertDidPressConfirm];
+    else %orig;
+}
 %end
 
 %hook YTPlayabilityResolutionUserActionUIControllerImpl
-- (void)showConfirmAlert { IS_ENABLED(HideContentWarning) ? [self confirmAlertDidPressConfirm] : %orig; }
+- (void)showConfirmAlert {
+    if (IS_ENABLED(HideContentWarning)) [self confirmAlertDidPressConfirm];
+    else %orig;
+}
 %end
 
 // Portrait Fullscreen
 %hook YTWatchViewController
-- (NSUInteger)allowedFullScreenOrientations { return IS_ENABLED(PortFull) ? UIInterfaceOrientationMaskAllButUpsideDown : %orig; }
+- (NSUInteger)allowedFullScreenOrientations {
+    if (IS_ENABLED(PortFull)) return UIInterfaceOrientationMaskAllButUpsideDown;
+    return %orig;
+}
 %end
 
 %group ForceMiniPlayer
@@ -567,7 +620,10 @@ static CGFloat YouModSpeedForHoldIndex(NSInteger index) {
     %orig(temp, arg2);
 }
 // Hide Watermarks
-- (BOOL)isWatermarkEnabled { return IS_ENABLED(HideWaterMark) ? NO : %orig; }
+- (BOOL)isWatermarkEnabled {
+    if (IS_ENABLED(HideWaterMark)) return NO;
+    return %orig;
+}
 - (void)setWatermarkEnabled:(BOOL)arg { 
     BOOL temp = IS_ENABLED(HideWaterMark) ? NO : arg;
     %orig(temp);

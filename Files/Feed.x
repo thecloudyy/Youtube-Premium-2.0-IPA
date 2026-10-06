@@ -2,7 +2,9 @@
 
 // Hide Subbar
 %hook YTHeaderContentComboView
-- (void)enableSubheaderBarWithView:(id)arg1 { if (!IS_ENABLED(HideSubbar)) %orig; }
+- (void)enableSubheaderBarWithView:(id)arg1 {
+    if (!IS_ENABLED(HideSubbar)) %orig;
+}
 - (void)setFeedHeaderScrollMode:(int)arg1 { 
     int temp = IS_ENABLED(HideSubbar) ? 0 : arg1;
     %orig(temp);
@@ -24,12 +26,17 @@
         [self setValue:@(NO) forKey:@"_isVoiceSearchAllowed"];
     }
 }
-- (void)setSuggestions:(id)arg1 { if (!IS_ENABLED(HideSearchHis)) %orig; }
+- (void)setSuggestions:(id)arg1 {
+    if (!IS_ENABLED(HideSearchHis)) %orig;
+}
 %end
 
 // Hide search history and suggestions
 %hook YTPersonalizedSuggestionsCacheProvider
-- (id)activeCache { return IS_ENABLED(HideSearchHis) ? nil : %orig; }
+- (id)activeCache {
+    if (IS_ENABLED(HideSearchHis)) return nil;
+    return %orig;
+}
 %end
 
 // Hide related videos in the player

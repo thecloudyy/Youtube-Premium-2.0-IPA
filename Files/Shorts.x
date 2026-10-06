@@ -2,29 +2,68 @@
 
 // Enables shorts quality - works best with YTClassicVideoQuality
 %hook YTHotConfig
-- (BOOL)enableOmitAdvancedMenuInShortsVideoQualityPicker { return IS_ENABLED(EnablesShortsQuality) ? YES : %orig; }
-- (BOOL)enableShortsVideoQualityPicker { return IS_ENABLED(EnablesShortsQuality) ? YES : %orig; }
-- (BOOL)iosEnableImmersiveLivePlayerVideoQuality { return IS_ENABLED(EnablesShortsQuality) ? YES : %orig; }
-- (BOOL)iosEnableShortsPlayerVideoQuality { return IS_ENABLED(EnablesShortsQuality) ? YES : %orig; }
-- (BOOL)iosEnableShortsPlayerVideoQualityRestartVideo { return IS_ENABLED(EnablesShortsQuality) ? YES : %orig; }
-- (BOOL)iosEnableSimplerTitleInShortsVideoQualityPicker { return IS_ENABLED(EnablesShortsQuality) ? YES : %orig; }
-- (BOOL)enablePlayerBarForVerticalVideoWhenControlsHiddenInFullscreen { return IS_ENABLED(ShowShortsSeekbar) ? YES : %orig; }
+- (BOOL)enableOmitAdvancedMenuInShortsVideoQualityPicker {
+    if (IS_ENABLED(EnablesShortsQuality)) return YES;
+    return %orig;
+}
+- (BOOL)enableShortsVideoQualityPicker {
+    if (IS_ENABLED(EnablesShortsQuality)) return YES;
+    return %orig;
+}
+- (BOOL)iosEnableImmersiveLivePlayerVideoQuality {
+    if (IS_ENABLED(EnablesShortsQuality)) return YES;
+    return %orig;
+}
+- (BOOL)iosEnableShortsPlayerVideoQuality {
+    if (IS_ENABLED(EnablesShortsQuality)) return YES;
+    return %orig;
+}
+- (BOOL)iosEnableShortsPlayerVideoQualityRestartVideo {
+    if (IS_ENABLED(EnablesShortsQuality)) return YES;
+    return %orig;
+}
+- (BOOL)iosEnableSimplerTitleInShortsVideoQualityPicker {
+    if (IS_ENABLED(EnablesShortsQuality)) return YES;
+    return %orig;
+}
+- (BOOL)enablePlayerBarForVerticalVideoWhenControlsHiddenInFullscreen {
+    if (IS_ENABLED(ShowShortsSeekbar)) return YES;
+    return %orig;
+}
 %end
 
 // Always show Shorts seekbar
 %hook YTShortsPlayerViewController
-- (BOOL)shouldAlwaysEnablePlayerBar { return IS_ENABLED(ShowShortsSeekbar) ? YES : %orig; }
-- (BOOL)shouldEnablePlayerBarOnlyOnPause { return IS_ENABLED(ShowShortsSeekbar) ? NO : %orig; }
+- (BOOL)shouldAlwaysEnablePlayerBar {
+    if (IS_ENABLED(ShowShortsSeekbar)) return YES;
+    return %orig;
+}
+- (BOOL)shouldEnablePlayerBarOnlyOnPause {
+    if (IS_ENABLED(ShowShortsSeekbar)) return NO;
+    return %orig;
+}
 %end
 
 %hook YTReelPlayerViewControllerSub
-- (BOOL)shouldAlwaysEnablePlayerBar { return IS_ENABLED(ShowShortsSeekbar) ? YES : %orig; }
-- (BOOL)shouldEnablePlayerBarOnlyOnPause { return IS_ENABLED(ShowShortsSeekbar) ? NO : %orig; }
+- (BOOL)shouldAlwaysEnablePlayerBar {
+    if (IS_ENABLED(ShowShortsSeekbar)) return YES;
+    return %orig;
+}
+- (BOOL)shouldEnablePlayerBarOnlyOnPause {
+    if (IS_ENABLED(ShowShortsSeekbar)) return NO;
+    return %orig;
+}
 %end
 
 %hook YTColdConfig
-- (BOOL)iosEnableVideoPlayerScrubber { return IS_ENABLED(ShowShortsSeekbar) ? YES : %orig; }
-- (BOOL)mobileShortsTablnlinedExpandWatchOnDismiss { return IS_ENABLED(ShowShortsSeekbar) ? YES : %orig; }
+- (BOOL)iosEnableVideoPlayerScrubber {
+    if (IS_ENABLED(ShowShortsSeekbar)) return YES;
+    return %orig;
+}
+- (BOOL)mobileShortsTablnlinedExpandWatchOnDismiss {
+    if (IS_ENABLED(ShowShortsSeekbar)) return YES;
+    return %orig;
+}
 %end
 
 static void YouModMakeAShortsAction(YTReelPlayerViewController *self, YTSingleVideoController *video, YTSingleVideoTime *time) {
@@ -43,8 +82,14 @@ static BOOL isShortsOnlyOn = YES;
 static BOOL isFullscreenEnabled = NO;
 
 %hook YTReelPlayerViewController
-- (BOOL)shouldAlwaysEnablePlayerBar { return IS_ENABLED(ShowShortsSeekbar) ? YES : %orig; }
-- (BOOL)shouldEnablePlayerBarOnlyOnPause { return IS_ENABLED(ShowShortsSeekbar) ? NO : %orig; }
+- (BOOL)shouldAlwaysEnablePlayerBar {
+    if (IS_ENABLED(ShowShortsSeekbar)) return YES;
+    return %orig;
+}
+- (BOOL)shouldEnablePlayerBarOnlyOnPause {
+    if (IS_ENABLED(ShowShortsSeekbar)) return NO;
+    return %orig;
+}
 - (void)singleVideo:(YTSingleVideoController *)video currentVideoTimeDidChange:(YTSingleVideoTime *)time {
     %orig;
     YouModMakeAShortsAction(self, video, time);

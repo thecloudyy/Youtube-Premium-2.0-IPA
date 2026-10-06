@@ -2,55 +2,101 @@
 
 // Background playback
 %hook MLVideo
-- (BOOL)playableInBackground { return IS_ENABLED(BackgroundPlayback) ? YES : %orig; }
+- (BOOL)playableInBackground {
+    if (IS_ENABLED(BackgroundPlayback)) return YES;
+    return %orig;
+}
 %end
 
 %hook YTIPlayabilityStatus
-- (BOOL)isPlayableInBackground { return IS_ENABLED(BackgroundPlayback) ? YES : %orig; }
+- (BOOL)isPlayableInBackground {
+    if (IS_ENABLED(BackgroundPlayback)) return YES;
+    return %orig;
+}
 %end
 
 %hook YTPlaybackData
-- (BOOL)isPlayableInBackground { return IS_ENABLED(BackgroundPlayback) ? YES : %orig; }
+- (BOOL)isPlayableInBackground {
+    if (IS_ENABLED(BackgroundPlayback)) return YES;
+    return %orig;
+}
 %end
 
 %hook YTIPlayerResponse
-- (BOOL)isPlayableInBackground { return IS_ENABLED(BackgroundPlayback) ? YES : %orig; }
+- (BOOL)isPlayableInBackground {
+    if (IS_ENABLED(BackgroundPlayback)) return YES;
+    return %orig;
+}
 %end
 
 %hook YTColdConfig
 // Try to disable Shorts PiP
-- (BOOL)shortsPlayerGlobalConfigEnableReelsPictureInPicture { return IS_ENABLED(DisablesShortsPiP) ? NO : %orig; }
-- (BOOL)shortsPlayerGlobalConfigEnableReelsPictureInPictureIos { return IS_ENABLED(DisablesShortsPiP) ? NO : %orig; }
+- (BOOL)shortsPlayerGlobalConfigEnableReelsPictureInPicture {
+    if (IS_ENABLED(DisablesShortsPiP)) return NO;
+    return %orig;
+}
+- (BOOL)shortsPlayerGlobalConfigEnableReelsPictureInPictureIos {
+    if (IS_ENABLED(DisablesShortsPiP)) return NO;
+    return %orig;
+}
 // Hide startup animations
-- (BOOL)mainAppCoreClientIosEnableStartupAnimation { return IS_ENABLED(HideStartupAni) ? NO : %orig; }
+- (BOOL)mainAppCoreClientIosEnableStartupAnimation {
+    if (IS_ENABLED(HideStartupAni)) return NO;
+    return %orig;
+}
 // Prevent YouTube from asking "Are you there?"
-- (BOOL)enableYouthereCommandsOnIos { return IS_ENABLED(BlockUpgradeDialogs) ? NO : %orig; }
+- (BOOL)enableYouthereCommandsOnIos {
+    if (IS_ENABLED(BlockUpgradeDialogs)) return NO;
+    return %orig;
+}
 // Fixes slow miniplayer
-- (BOOL)enableIosFloatingMiniplayerDoubleTapToResize { return IS_ENABLED(FixesSlowMiniPlayer) ? NO : %orig; }
+- (BOOL)enableIosFloatingMiniplayerDoubleTapToResize {
+    if (IS_ENABLED(FixesSlowMiniPlayer)) return NO;
+    return %orig;
+}
 // Use old miniplayer
-- (BOOL)enableIosFloatingMiniplayer { return IS_ENABLED(DisablesNewMiniPlayer) ? NO : %orig; }
+- (BOOL)enableIosFloatingMiniplayer {
+    if (IS_ENABLED(DisablesNewMiniPlayer)) return NO;
+    return %orig;
+}
 %end
 
 %hook YTHotConfig
-- (BOOL)shortsPlayerGlobalConfigEnableReelsPictureInPictureAllowedFromPlayer { return IS_ENABLED(DisablesShortsPiP) ? NO : %orig; }
+- (BOOL)shortsPlayerGlobalConfigEnableReelsPictureInPictureAllowedFromPlayer {
+    if (IS_ENABLED(DisablesShortsPiP)) return NO;
+    return %orig;
+}
 %end
 
 %hook YTReelModel
-- (BOOL)isPiPSupported { return IS_ENABLED(DisablesShortsPiP) ? NO : %orig; }
+- (BOOL)isPiPSupported {
+    if (IS_ENABLED(DisablesShortsPiP)) return NO;
+    return %orig;
+}
 %end
 
 %hook YTReelPlayerViewController
-- (BOOL)isPictureInPictureAllowed { return IS_ENABLED(DisablesShortsPiP) ? NO : %orig; }
-- (void)setupPlayerForPiP { if (!IS_ENABLED(DisablesShortsPiP)) %orig; }
+- (BOOL)isPictureInPictureAllowed {
+    if (IS_ENABLED(DisablesShortsPiP)) return NO;
+    return %orig;
+}
+- (void)setupPlayerForPiP {
+    if (!IS_ENABLED(DisablesShortsPiP)) %orig;
+}
 %end
 
 %hook YTReelWatchRootViewController
-- (void)switchToPictureInPicture { if (!IS_ENABLED(DisablesShortsPiP)) %orig; }
+- (void)switchToPictureInPicture {
+    if (!IS_ENABLED(DisablesShortsPiP)) %orig;
+}
 %end
 
 // Disable Hints
 %hook YTSettings
-- (BOOL)areHintsDisabled { return IS_ENABLED(DisableHints) ? YES : %orig; }
+- (BOOL)areHintsDisabled {
+    if (IS_ENABLED(DisableHints)) return YES;
+    return %orig;
+}
 - (void)setHintsDisabled:(BOOL)arg1 {
     BOOL temp = IS_ENABLED(DisableHints) ? YES : arg1;
     %orig(temp);
@@ -58,7 +104,10 @@
 %end
 
 %hook YTSettingsImpl
-- (BOOL)areHintsDisabled { return IS_ENABLED(DisableHints) ? YES : %orig; }
+- (BOOL)areHintsDisabled {
+    if (IS_ENABLED(DisableHints)) return YES;
+    return %orig;
+}
 - (void)setHintsDisabled:(BOOL)arg1 {
     BOOL temp = IS_ENABLED(DisableHints) ? YES : arg1;
     %orig(temp);
@@ -66,7 +115,10 @@
 %end
 
 %hook YTUserDefaults
-- (BOOL)areHintsDisabled { return IS_ENABLED(DisableHints) ? YES : %orig; }
+- (BOOL)areHintsDisabled {
+    if (IS_ENABLED(DisableHints)) return YES;
+    return %orig;
+}
 - (void)setHintsDisabled:(BOOL)arg1 {
     BOOL temp = IS_ENABLED(DisableHints) ? YES : arg1;
     %orig(temp);
@@ -75,28 +127,59 @@
 
 // Block upgrade dialogs
 %hook YTGlobalConfig
-- (BOOL)shouldBlockUpgradeDialog { return IS_ENABLED(BlockUpgradeDialogs) ? YES : %orig; }
-- (BOOL)shouldShowUpgradeDialog { return IS_ENABLED(BlockUpgradeDialogs) ? NO : %orig; }
-- (BOOL)shouldShowUpgrade { return IS_ENABLED(BlockUpgradeDialogs) ? NO : %orig; }
-- (BOOL)shouldForceUpgrade { return IS_ENABLED(BlockUpgradeDialogs) ? NO : %orig; }
+- (BOOL)shouldBlockUpgradeDialog {
+    if (IS_ENABLED(BlockUpgradeDialogs)) return YES;
+    return %orig;
+}
+- (BOOL)shouldShowUpgradeDialog {
+    if (IS_ENABLED(BlockUpgradeDialogs)) return NO;
+    return %orig;
+}
+- (BOOL)shouldShowUpgrade {
+    if (IS_ENABLED(BlockUpgradeDialogs)) return NO;
+    return %orig;
+}
+- (BOOL)shouldForceUpgrade {
+    if (IS_ENABLED(BlockUpgradeDialogs)) return NO;
+    return %orig;
+}
 %end
 
 %hook YTYouThereController
-- (BOOL)shouldShowYouTherePrompt { return IS_ENABLED(HideAreYouThereDialog) ? NO : %orig; }
-- (void)showYouTherePrompt { if (!IS_ENABLED(HideAreYouThereDialog)) %orig; }
+- (BOOL)shouldShowYouTherePrompt {
+    if (IS_ENABLED(HideAreYouThereDialog)) return NO;
+    return %orig;
+}
+- (void)showYouTherePrompt {
+    if (!IS_ENABLED(HideAreYouThereDialog)) %orig;
+}
 %end
 
 %hook YTYouThereControllerImpl
-- (BOOL)shouldShowYouTherePrompt { return IS_ENABLED(HideAreYouThereDialog) ? NO : %orig; }
-- (void)showYouTherePrompt { if (!IS_ENABLED(HideAreYouThereDialog)) %orig; }
+- (BOOL)shouldShowYouTherePrompt {
+    if (IS_ENABLED(HideAreYouThereDialog)) return NO;
+    return %orig;
+}
+- (void)showYouTherePrompt {
+    if (!IS_ENABLED(HideAreYouThereDialog)) %orig;
+}
 %end
 
 // Disables Snackbar
 %hook GOOHUDManagerInternal
-- (id)sharedInstance { return IS_ENABLED(DisablesSnackBar) ? nil : %orig; }
-- (void)showMessageMainThread:(id)arg { if (!IS_ENABLED(DisablesSnackBar)) %orig; }
-- (void)activateOverlay:(id)arg { if (!IS_ENABLED(DisablesSnackBar)) %orig; }
-- (void)displayHUDViewForMessage:(id)arg { if (!IS_ENABLED(DisablesSnackBar)) %orig; }
+- (id)sharedInstance {
+    if (IS_ENABLED(DisablesSnackBar)) return nil;
+    return %orig;
+}
+- (void)showMessageMainThread:(id)arg {
+    if (!IS_ENABLED(DisablesSnackBar)) %orig;
+}
+- (void)activateOverlay:(id)arg {
+    if (!IS_ENABLED(DisablesSnackBar)) %orig;
+}
+- (void)displayHUDViewForMessage:(id)arg {
+    if (!IS_ENABLED(DisablesSnackBar)) %orig;
+}
 %end
 
 // Remove "Play next in queue" from the menu @PoomSmart (https://github.com/qnblackcat/uYouPlus/issues/1138#issuecomment-1606415080)
@@ -189,8 +272,14 @@
 %end
 
 %hook NSParagraphStyle
-+ (NSWritingDirection)defaultWritingDirectionForLanguage:(id)lang { return IS_ENABLED(DisablesRTL) ? NSWritingDirectionLeftToRight : %orig; }
-+ (NSWritingDirection)_defaultWritingDirection { return IS_ENABLED(DisablesRTL) ? NSWritingDirectionLeftToRight : %orig; }
++ (NSWritingDirection)defaultWritingDirectionForLanguage:(id)lang {
+    if (IS_ENABLED(DisablesRTL)) return NSWritingDirectionLeftToRight;
+    return %orig;
+}
++ (NSWritingDirection)_defaultWritingDirection {
+    if (IS_ENABLED(DisablesRTL)) return NSWritingDirectionLeftToRight;
+    return %orig;
+}
 %end
 
 %hook UIDevice
@@ -206,9 +295,14 @@
 %end
 
 %hook UIKeyboardImpl
-+ (BOOL)isFloating { return IS_ENABLED(FloatingKeyboard) && isPad() ? YES : %orig; }
++ (BOOL)isFloating {
+    if (IS_ENABLED(FloatingKeyboard) && isPad()) return YES;
+    return %orig;
+}
 %end
 
 %hook YTEngagementPanelHeaderView
-- (void)setSubheader:(UIView *)view { if (!IS_ENABLED(HideEngagementSubbar)) %orig; }
+- (void)setSubheader:(UIView *)view {
+    if (!IS_ENABLED(HideEngagementSubbar)) %orig;
+}
 %end
